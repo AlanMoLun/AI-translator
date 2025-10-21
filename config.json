@@ -1,0 +1,46 @@
+{
+  "activeClient": "openAI",
+  "glossary": "glossary_V2.csv",
+
+  "openAI": {
+    "model": "text-embedding-3-small",
+    "base_url": "https://api.openai.com/v1",
+    "embedding_dim": 1536
+  },
+  "deepseek": {
+    "model": "text-embedding",
+    "base_url": "https://api.deepseek.com/v1",
+    "embedding_dim": 1024
+  },
+  "gemini": {
+    "model": "models/embedding-001",
+    "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
+    "embedding_dim": 768
+  },
+  "doubao": {
+    "model": "text-embedding",
+    "base_url": "https://ark.cn-beijing.volces.com/api/v3",
+    "embedding_dim": 1024
+  },
+  "qwen": {
+    "model": "text-embedding-v2",
+    "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "embedding_dim": 1536
+  },
+  "zhipu": {
+    "model": "embedding-2",
+    "base_url": "https://open.bigmodel.cn/api/paas/v4",
+    "embedding_dim": 1024
+  },
+  "baichuan": {
+    "model": "Baichuan-Text-Embedding",
+    "base_url": "https://api.baichuan-ai.com/v1",
+    "embedding_dim": 1024
+  },
+  "azure": {
+    "model": "text-embedding-3-small",
+    "base_url": "https://your-resource.openai.azure.com/openai/deployments/your-deployment-name",
+    "api_version": "2024-02-01",
+    "embedding_dim": 1536
+  }
+}
