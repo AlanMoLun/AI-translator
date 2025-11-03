@@ -6,9 +6,10 @@ from translate import translate_with_glossary
 
 if __name__ == "__main__":
     # 定义目录
-    binFolder = ".\\bin\\"
-    glossariesFolder = ".\\glossaries\\"
-    translationFolder = ".\\translation\\"
+    projectRoot = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "\\"
+    binFolder = os.path.join(projectRoot, "bin") + "\\"
+    glossariesFolder = os.path.join(projectRoot, "glossaries") + "\\"
+    translationFolder = os.path.join(projectRoot, "translation") + "\\"
     input_file = os.path.join(translationFolder, "input.txt")
     output_file = os.path.join(translationFolder, "translated.txt")
 

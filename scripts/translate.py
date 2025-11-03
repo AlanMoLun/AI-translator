@@ -6,24 +6,24 @@
 
 import os
 import json
-import pickle
 import faiss
 import numpy as np
 import pandas as pd
 from openai import OpenAI
 
 # 定义目录
-binFolder = ".\\bin\\"
-glossariesFolder = ".\\glossaries\\"
-translationFolder = ".\\translation\\"
+projectRoot = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "\\"
+binFolder = os.path.join(projectRoot, "bin") + "\\"
+glossariesFolder = os.path.join(projectRoot, "glossaries") + "\\"
+translationFolder = os.path.join(projectRoot, "translation") + "\\"
 
 # =====================================================
 # 1️⃣ 读取配置文件
 # =====================================================
-with open("config.json", "r", encoding="utf-8") as f:
+with open(projectRoot + "config.json", "r", encoding="utf-8") as f:
     config = json.load(f)
 
-with open("local.json", "r") as f:
+with open(projectRoot + "local.json", "r") as f:
     local = json.load(f)
 
 activeClient = config["activeClient"]
@@ -35,7 +35,7 @@ localConfig = local[activeClient]
 pklFile = binFolder + "glossary.pkl"
 indexFile = binFolder + "glossary.index"
 
-# 初始化 OpenAI 客户端
+# 初始化 embedding 客户端
 clientParams = {"api_key": localConfig["key"]}
 if "base_url" in clientConfig:
     clientParams["base_url"] = clientConfig["base_url"]
@@ -43,6 +43,15 @@ if activeClient == "azure" and "api_version" in clientConfig:
     clientParams["api_version"] = clientConfig["api_version"]
 
 client = OpenAI(**clientParams)
+
+# 初始化 chat 客户端
+chatClientParams = {"api_key": localConfig["key"]}
+if "base_url" in clientConfig:
+    chatClientParams["base_url"] = clientConfig["base_url"]
+if "api_version" in clientConfig:
+    chatClientParams["api_version"] = clientConfig["api_version"]
+
+chat_client = OpenAI(**chatClientParams)
 
 # =====================================================
 # 2️⃣ 加载词库和向量索引
@@ -113,7 +122,7 @@ def translate_with_glossary(query: str):
 """
 
     resp = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model=clientConfig["chatModle"],
         messages=[
             {"role": "system", "content": "You are a professional Buddhist translator."},
             {"role": "user", "content": prompt}
@@ -122,7 +131,6 @@ def translate_with_glossary(query: str):
 
     translation = resp.choices[0].message.content.strip()
     return translation, similar_terms
-
 
 # =====================================================
 # 4️⃣ 主程序入口

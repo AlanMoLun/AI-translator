@@ -1,3 +1,4 @@
+import os
 from openai import OpenAI
 import pandas as pd
 import faiss
@@ -5,15 +6,18 @@ import numpy as np
 import json
 
 # 定义目录
-binFolder = ".\\bin\\"
-glossariesFolder = ".\\glossaries\\"
-translationFolder = ".\\translation\\"
+projectRoot = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "\\"
+binFolder = os.path.join(projectRoot, "bin") + "\\"
+glossariesFolder = os.path.join(projectRoot, "glossaries") + "\\"
+translationFolder = os.path.join(projectRoot, "translation") + "\\"
 
-# 读取配置文件
-with open("config.json", "r") as f:
+# =====================================================
+# 1️⃣ 读取配置文件
+# =====================================================
+with open(projectRoot + "config.json", "r", encoding="utf-8") as f:
     config = json.load(f)
 
-with open("local.json", "r") as f:
+with open(projectRoot + "local.json", "r") as f:
     local = json.load(f)
 
 # 根据配置选择客户端和glossary文件
