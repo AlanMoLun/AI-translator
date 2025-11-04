@@ -1,23 +1,29 @@
-原文：菩提心是修行者的根本。若无菩提心，修行不能达到涅槃。
-翻译：The mind of enlightenment is fundamental to practitioners. Without the mind of enlightenment, one cannot attain Nirvana.
+原文：佛陀于灵鹫山宣说般若，开显二谛——世俗谛与胜义谛。声闻、缘觉依四圣谛出离三界；菩萨则行六度万行，不住生死亦不住涅槃。修止观双运，断除三毒，转五毒为五智。临终时若认取中阴明光，即可融入法性中阴，往生极乐净土或奥明净土，永脱恶道轮回。
+翻译：The Buddha taught the Prajñā on Vulture Peak, revealing the two truths—relative truth and absolute truth. The Śrāvakas and Pratyekabuddhas attain the determination to be free from the three worlds through the Four Noble Truths; the Bodhisattvas practice the six transcendent perfections and do not dwell in birth and death nor in nirvāṇa. By cultivating the simultaneous practice of calm and insight, they eradicate the three poisons and transform the five poisons into the five wisdoms. At the time of death, if one recognizes the clear light of the intermediate state, one can merge into the intermediate state of absolute reality, achieving rebirth in the Pure Land of Bliss or the Pure Land of Radiance, and forever escape the cycle of evil rebirths.
 参考术语：
-菩提心 → 「证悟之心」(the mind of enlightement) (en_v)  [距离: 1.1830]
-净土 → pure land (en)  [距离: 1.2932]
-极乐净土 → Pure Land of Bliss (en)  [距离: 1.3093]
---------------------------------------------------
 
-原文：观世音菩萨代表慈悲，曼荼罗象征完整的宇宙。
-翻译：Avalokiteśvara represents compassion, while the mandala symbolizes the complete universe.
-参考术语：
-观世音（大悲圣者） → Avalokiteśvara / Chenrezi (en)  [距离: 1.2520]
-项仁波切 → Shang Rinpoche (en)  [距离: 1.2776]
-佛 → Buddha (en)  [距离: 1.2825]
---------------------------------------------------
-
-原文：佛陀的二十五弟子和八十成就者在十方行十二头陀行
-翻译：The Buddha's twenty-five disciples and eighty accomplished ones engage in the twelve ascetic practices in all directions.
-参考术语：
-三十五佛 → thirty-five Buddhas (en)  [距离: 1.0121]
-二十五弟子 → twenty-five disciples (en)  [距离: 1.0327]
-第二佛 → Second Buddha (en)  [距离: 1.1518]
+🔸 参考术语：
+  二谛 → two truths（zh） ✅ 已使用  [距离: 0.0000]
+  三毒 → three poisons（zh） ✅ 已使用  [距离: 0.0000]
+  三界 → three worlds / three levels（zh） ✅ 已使用  [距离: 0.0000]
+  五毒 → five poisons（zh） ✅ 已使用  [距离: 0.0000]
+  五智 → five wisdoms（zh） ✅ 已使用  [距离: 0.0000]
+  六度 → six transcendent perfections（zh） ✅ 已使用  [距离: 0.0000]
+  中阴 → intermediate state（zh） ✅ 已使用  [距离: 0.0000]
+  世俗谛 → relative truth（zh） ✅ 已使用  [距离: 0.0000]
+  出离 → determination to be free（zh） ✅ 已使用  [距离: 0.0000]
+  佛 → Buddha（zh） ✅ 已使用  [距离: 0.0000]
+  明光 → clear light（zh） ✅ 已使用  [距离: 0.0000]
+  法 → Dharma（zh） ❌ 未使用  [距离: 0.0000]
+  法性 → -（zh） ❌ 未使用  [距离: 0.0000]
+  法性中阴 → intermediate state of absolute reality（zh） ✅ 已使用  [距离: 0.0000]
+  涅槃 → -（zh） ❌ 未使用  [距离: 0.0000]
+  净土 → pure land（zh） ✅ 已使用  [距离: 0.0000]
+  胜义谛 → absolute truth（zh） ✅ 已使用  [距离: 0.0000]
+  极乐净土 → Pure Land of Bliss（zh） ✅ 已使用  [距离: 0.0000]
+  菩萨 → -（zh） ❌ 未使用  [距离: 0.0000]
+  轮回 → -（zh） ❌ 未使用  [距离: 0.0000]
+  声闻 → -（zh） ❌ 未使用  [距离: 0.0000]
+  楼至佛（无量胜解佛） → Infinite Aspiration（zh） ❌ 未使用  [距离: 0.9084]
+  阿弥陀佛 → 「无量光」(immeasurable light)（zh） ❌ 未使用  [距离: 0.9692]
 --------------------------------------------------

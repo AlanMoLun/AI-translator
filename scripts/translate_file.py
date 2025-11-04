@@ -3,6 +3,7 @@
 # =====================================================
 import os
 from translate import translate_with_glossary
+from translate import get_terms_usage_string
 
 if __name__ == "__main__":
     # 定义目录
@@ -29,6 +30,8 @@ if __name__ == "__main__":
             [f"{t['zh']} → {t['translation']} ({t['source_column']})  [距离: {t['distance']:.4f}]"
              for t in terms]
         )
+        # result = f"原文：{query}\n翻译：{translation}\n参考术语：\n{terms_str}\n{'-'*50}"
+        terms_str = get_terms_usage_string(translation, terms)
         result = f"原文：{query}\n翻译：{translation}\n参考术语：\n{terms_str}\n{'-'*50}"
         all_translations.append(result)
         print(f"✅ 已翻译: {query}")

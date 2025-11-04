@@ -75,6 +75,39 @@ except Exception as e:
 # 3️⃣ 定义辅助函数
 # =====================================================
 
+# -------------------- 高亮术语使用情况（返回字符串） --------------------
+def get_terms_usage_string(translation: str, terms: list) -> str:
+    """
+    返回参考术语使用情况的字符串。
+    支持大小写忽略和简单变形判断。
+    """
+    lines = ["\n🔸 参考术语："]
+    
+    if not terms:
+        lines.append("  （无匹配术语）")
+        return "\n".join(lines)
+
+    translation_lower = translation.lower().replace("\n", " ").strip()
+
+    for t in terms:
+        term_trans = t["translation"].lower().strip()
+        # 忽略空翻译
+        if not term_trans or term_trans in ("-", ""):
+            used_flag = "❌ 未使用"
+        else:
+            # 拆分斜杠形式的多选翻译
+            options = [opt.strip() for opt in term_trans.split("/") if opt.strip()]
+            used_flag = "❌ 未使用"
+            for opt in options:
+                if opt in translation_lower:
+                    used_flag = "✅ 已使用"
+                    break
+
+        lines.append(f"  {t['zh']} → {t['translation']}（{t['source_column']}） {used_flag}  [距离: {t['distance']:.4f}]")
+
+    return "\n".join(lines)
+
+
 def get_embedding(text: str):
     """生成文本的 embedding 向量"""
     resp = client.embeddings.create(
@@ -85,32 +118,104 @@ def get_embedding(text: str):
 
 
 def find_similar_terms(query: str, top_k: int = 3):
-    """查找与输入文本最相似的术语"""
-    query_emb = get_embedding(query)
-    D, I = index.search(query_emb, top_k)
-    results = []
+    """
+    查找与输入文本最相似的术语。
+    优先使用字符串直接匹配，然后再用 embedding 搜索补充。
+    """
+    matches = []
 
-    for dist, idx in zip(D[0], I[0]):
-        term_row = glossary_data.iloc[idx]
-        results.append({
-            "zh": term_row["zh"],
-            "translation": term_row["selected_text"] if "selected_text" in term_row else term_row.get("en", ""),
-            "source_column": term_row.get("source_column", "N/A"),
-            "distance": float(dist)
-        })
-    return results
+    # 1. 直接匹配：优先找出句中明确包含的术语
+    for _, row in glossary_data.iterrows():
+        zh_term = str(row["zh"]).strip()
+        if zh_term and zh_term in query:
+            matches.append({
+                "zh": zh_term,
+                "translation": row["selected_text"] if "selected_text" in row else row.get("en", ""),
+                "source_column": row.get("source_column", "N/A"),
+                "distance": 0.0
+            })
 
+    # 2. 向量匹配：补充语义上相近的术语
+    try:
+        query_emb = get_embedding(query)
+        D, I = index.search(query_emb, top_k)
+        for dist, idx in zip(D[0], I[0]):
+            row = glossary_data.iloc[idx]
+            zh_term = str(row["zh"]).strip()
+            if zh_term not in [m["zh"] for m in matches]:
+                matches.append({
+                    "zh": zh_term,
+                    "translation": row["selected_text"] if "selected_text" in row else row.get("en", ""),
+                    "source_column": row.get("source_column", "N/A"),
+                    "distance": float(dist)
+                })
+    except Exception as e:
+        print(f"⚠️ 向量搜索失败: {e}")
 
-def translate_with_glossary(query: str):
-    """结合 glossary 信息的智能翻译"""
-    similar_terms = find_similar_terms(query)
-    glossary_context = "\n".join(
-        [f"{t['zh']} → {t['translation']} ({t['source_column']})" for t in similar_terms]
-    )
+    # 3. 按距离排序（直接匹配的 distance=0 优先）
+    matches.sort(key=lambda x: x["distance"])
+    return matches
 
+def translate_with_glossary(query: str, auto_detect_terms: bool = True):
+    """
+    结合 glossary 信息的智能翻译。
+    在翻译前整合字符串匹配和语义匹配结果。
+    """
+    detected_terms = []
+    
+    # =====================================================
+    # 🧩 可选：使用 AI 自动检测疑似佛学术语
+    # =====================================================
+    if auto_detect_terms:
+        try:
+            term_resp = client.chat.completions.create(
+                model=clientConfig["chatModle"],
+                messages=[
+                    {"role": "system", "content": "你是一个佛学术语识别助手。"},
+                    {"role": "user", "content": f"列出以下句子中出现的佛学术语（只列中文术语）：\n{query}"}
+                ]
+            )
+            # 提取检测到的术语（用 split() 自动去除多余空格、换行）
+            detected_terms = term_resp.choices[0].message.content.split()
+            if detected_terms:
+                print(f"🧠 检测到疑似术语: {', '.join(detected_terms)}")
+        except Exception as e:
+            print(f"⚠️ 检测术语时出错: {e}")
+            detected_terms = []
+    
+    # =====================================================
+    # 🔍 查找与输入文本或检测术语相似的词汇
+    # =====================================================
+    similar_terms = []
+    if detected_terms:
+        # 对检测到的每个术语单独查找相似项
+        for term in detected_terms:
+            similar_terms.extend(find_similar_terms(term, top_k=2))
+    else:
+        # 否则只查整句
+        similar_terms = find_similar_terms(query)
+    
+    # 去重：根据中文术语去重
+    seen = set()
+    unique_terms = []
+    for t in similar_terms:
+        if t["zh"] not in seen:
+            seen.add(t["zh"])
+            unique_terms.append(t)
+
+    # 构建术语提示文本
+    if similar_terms:
+        glossary_context = "\n".join(
+            [f"{t['zh']} → {t['translation']}（{t['source_column']}）" for t in similar_terms]
+        )
+    else:
+        glossary_context = "（无匹配术语）"
+
+    # 构建翻译 prompt
     prompt = f"""
-你是一个专业的佛学翻译助手。请将下面的中文翻译成英文，
-并严格参考下列术语表进行术语一致性翻译。
+你是一个专业的佛学翻译助手。请将下面的中文句子翻译成英文，
+并严格参考下列术语表中的译法。
+⚠️ 若句中包含的术语出现在术语表中，必须完全按照术语表翻译。
 
 术语表：
 {glossary_context}
@@ -118,7 +223,7 @@ def translate_with_glossary(query: str):
 需要翻译的句子：
 {query}
 
-请输出高质量英文翻译。
+请输出忠实、自然、专业的英文翻译。
 """
 
     resp = client.chat.completions.create(
@@ -146,11 +251,16 @@ if __name__ == "__main__":
         if query.lower() in ("exit", "quit", "bye"):
             break
 
-        translation, terms = translate_with_glossary(query)
+        translation, terms = translate_with_glossary(query, False)
 
         print("\n🔹 翻译结果：")
         print(translation)
 
-        print("\n🔸 参考术语：")
-        for t in terms:
-            print(f"  {t['zh']} → {t['translation']} ({t['source_column']})  [距离: {t['distance']:.4f}]")
+        # print("\n🔸 参考术语：")
+        # for t in terms:
+        #     print(f"  {t['zh']} → {t['translation']} ({t['source_column']})  [距离: {t['distance']:.4f}]")
+        
+        # 高亮术语使用情况
+        terms_str = get_terms_usage_string(translation, terms)
+        print(terms_str)
+
