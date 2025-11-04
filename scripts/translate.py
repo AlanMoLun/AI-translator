@@ -169,7 +169,7 @@ def translate_with_glossary(query: str, auto_detect_terms: bool = True):
     if auto_detect_terms:
         try:
             term_resp = client.chat.completions.create(
-                model=clientConfig["chatModle"],
+                model=clientConfig["chatModel"],
                 messages=[
                     {"role": "system", "content": "你是一个佛学术语识别助手。"},
                     {"role": "user", "content": f"列出以下句子中出现的佛学术语（只列中文术语）：\n{query}"}
@@ -227,7 +227,7 @@ def translate_with_glossary(query: str, auto_detect_terms: bool = True):
 """
 
     resp = client.chat.completions.create(
-        model=clientConfig["chatModle"],
+        model=clientConfig["chatModel"],
         messages=[
             {"role": "system", "content": "You are a professional Buddhist translator."},
             {"role": "user", "content": prompt}
