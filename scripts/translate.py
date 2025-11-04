@@ -27,7 +27,6 @@ with open(projectRoot + "local.json", "r") as f:
     local = json.load(f)
 
 activeClient = config["activeClient"]
-glossaryFile = glossariesFolder + config["glossary"]
 clientConfig = config[activeClient]
 localConfig = local[activeClient]
 
