@@ -102,7 +102,8 @@ def get_terms_usage_string(translation: str, terms: list) -> str:
                     used_flag = "✅ 已使用"
                     break
 
-        lines.append(f"  {t['zh']} → {t['translation']}（{t['source_column']}） {used_flag}  [距离: {t['distance']:.4f}]")
+        if used_flag == "✅ 已使用":
+            lines.append(f"  {t['zh']} → {t['translation']}（{t['source_column']}） {used_flag}  [距离: {t['distance']:.4f}]")
 
     return "\n".join(lines)
 
@@ -212,9 +213,11 @@ def translate_with_glossary(query: str, auto_detect_terms: bool = True):
 
     # 构建翻译 prompt
     prompt = f"""
-你是一个专业的佛学翻译助手。请将下面的中文句子翻译成英文，
+你是一个专业的佛学术语识别助手和佛学翻译助手。请将下面的中文句子翻译成英文，
 并严格参考下列术语表中的译法。
-⚠️ 若句中包含的术语出现在术语表中，必须完全按照术语表翻译。
+注意以下2点： 
+1. 若句中包含的术语出现在术语表中，必须用中括号标注。
+2. 若句中包含的术语出现在术语表中，必须完全按照术语表翻译。
 
 术语表：
 {glossary_context}
