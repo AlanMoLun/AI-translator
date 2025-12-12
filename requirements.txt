@@ -1,4 +1,23 @@
-openai>=1.42.0
 pandas
-faiss-cpu
 numpy
+
+# Core LangChain
+langchain==0.3.5
+
+# OpenAI integration
+langchain-openai==0.2.2
+openai>=1.40.0
+
+# Community / PDF loader
+langchain-community==0.3.2
+pypdf>=4.0.0
+
+# Chroma vector store
+langchain-chroma==0.2.0
+chromadb>=0.5.7,<0.6.0
+
+# Tokenization for OpenAI embeddings
+tiktoken>=0.7.0
+
+# Environment variable support
+python-dotenv>=1.0.1

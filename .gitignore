@@ -2,3 +2,4 @@
 local.json
 glossaries/glossary*
 bin
+scripts/__pycache__

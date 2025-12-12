@@ -4,14 +4,14 @@ import json
 import pandas as pd
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_chroma import Chroma
-
+from chromadb.config import Settings
+import chromadb.telemetry as telemetry
 
 # ----------------------------------------
 # Paths
 # ----------------------------------------
 projectRoot = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "\\"
-binFolder = os.path.join(projectRoot, "bin") + "\\"
-chromaFolder = os.path.join(binFolder, "chroma_glossary")  # must match previous save
+chromaFolder = os.path.join(projectRoot, "chromaData") + "\\"
 translationFolder = os.path.join(projectRoot, "translation") + "\\"
 
 # ----------------------------------------
@@ -45,12 +45,14 @@ chat_llm = ChatOpenAI(
 # ----------------------------------------
 # Load / build Chroma Vector DB
 # ----------------------------------------
+telemetry.capture = lambda event_name: None
 def load_or_build_chroma():
     if os.path.exists(chromaFolder):
         vectordb = Chroma(
             embedding_function=embedding,
             persist_directory=chromaFolder,
-            collection_name="glossary"
+            collection_name="glossary",
+            client_settings=Settings(anonymized_telemetry=True) 
         )
         print("✅ Loaded existing Chroma DB.")
     else:

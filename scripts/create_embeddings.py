@@ -9,7 +9,7 @@ from chromadb.config import Settings
 # 目录设置
 # =========================
 projectRoot = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "\\"
-binFolder = os.path.join(projectRoot, "bin") + "\\"
+chromaFolder = os.path.join(projectRoot, "chromaData") + "\\"
 glossariesFolder = os.path.join(projectRoot, "glossaries") + "\\"
 
 # =========================
@@ -85,17 +85,16 @@ print(f"准备生成 {len(texts)} 个 embedding")
 # =========================
 # 保存到 Chroma
 # =========================
-persist_directory = os.path.join(binFolder, "chroma_glossary")
 chroma_db = Chroma.from_texts(
     texts=texts,
     embedding=embeddings,
     metadatas=metadatas,
-    persist_directory=persist_directory,
+    persist_directory=chromaFolder,
     collection_name="glossary",
-    client_settings=Settings(anonymized_telemetry=False)
+    client_settings=Settings(anonymized_telemetry=True)
 )
 
-print(f"✅ Chroma 词库保存完成，目录: {persist_directory}")
+print(f"✅ Chroma 词库保存完成，目录: {chromaFolder}")
 
 # =========================
 # 输出统计
