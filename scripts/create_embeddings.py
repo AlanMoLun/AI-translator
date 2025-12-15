@@ -33,8 +33,12 @@ print(f"使用词库文件: {glossaryFile}")
 # 初始化 OpenAI Embeddings
 # =========================
 clientParams = {"openai_api_key": localConfig["key"]}
-embeddings_model = clientConfig.get("model", "text-embedding-3-large")
-embeddings = OpenAIEmbeddings(model=embeddings_model, **clientParams)
+
+embedding = OpenAIEmbeddings(
+    model=clientConfig["model"],
+    api_key=localConfig["key"],
+    base_url=clientConfig.get("base_url")
+)
 
 # =========================
 # 读取词库
@@ -87,7 +91,7 @@ print(f"准备生成 {len(texts)} 个 embedding")
 # =========================
 chroma_db = Chroma.from_texts(
     texts=texts,
-    embedding=embeddings,
+    embedding=embedding,
     metadatas=metadatas,
     persist_directory=chromaFolder,
     collection_name="glossary",
