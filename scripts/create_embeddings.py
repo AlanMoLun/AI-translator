@@ -32,8 +32,6 @@ print(f"使用词库文件: {glossaryFile}")
 # =========================
 # 初始化 OpenAI Embeddings
 # =========================
-clientParams = {"openai_api_key": localConfig["key"]}
-
 embedding = OpenAIEmbeddings(
     model=clientConfig["model"],
     api_key=localConfig["key"],
